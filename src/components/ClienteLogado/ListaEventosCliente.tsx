@@ -5,6 +5,7 @@ import { Buffer } from 'buffer';
 import Link from 'next/link';
 import VerMaisDetalhes from './VerMaisDetalhes';
 import { getSession } from 'next-auth/react';
+import { get } from 'http';
 
 export default function ListaEventosCliente(props: any) {
   const [eventos, setEventos] = useState([]);
@@ -22,7 +23,11 @@ export default function ListaEventosCliente(props: any) {
       const response2 = await axios.get('/api/endereco')
       setEnderecos(response2.data)
       const response3 = await axios.get('/api/setor')
-      setSetores(response3.data)
+      const setores = response3.data.map((setor: any) => ({
+        ...setor,
+        preco: setor.valor
+      })); // Copia o array de setores
+      setSetores(setores)
     } catch (error) {
       console.log(error);
     }
@@ -52,9 +57,10 @@ export default function ListaEventosCliente(props: any) {
             Hora={evento.horario_evento}
             Local={getEnderecoDoEvento(evento.id)[0]?.cidade}
             Image={convertBufferToUrl(evento.imagem)}
-            setores={getSetoresDoEvento(evento.id)} // Filtra os setores correspondentes ao evento
+            setores={getSetoresDoEvento(evento.id)}
+            preco={getSetoresDoEvento(evento.id[0]?.valor)} // Filtra os setores correspondentes ao evento
           />
-          <div style={{ marginLeft: 100 }}>
+          <div style={{ padding: 50  }}>
             <Link href={`/evento/?id=${evento.id}`} key={evento.id} passHref>
               <VerMaisDetalhes />
             </Link>

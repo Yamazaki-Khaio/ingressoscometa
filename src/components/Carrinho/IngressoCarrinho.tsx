@@ -14,17 +14,11 @@ interface Item {
 export default function IngressoCarrinho(props: any) {
   async function Suspender(event: React.ChangeEvent<HTMLInputElement>){
     try{
-    const formData = {
-        id: props.id_ingresso,
-        ativado: 0
+      const formData = {
+        id_evento: props.id,
       };
-    const resEvento = await fetch(`/api/evento?id=${formData.id}`, {
-        method: 'PUT',
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(formData)
-      });
+      console.log(formData);
+      const resEvento = await axios.delete(`/api/carrinhoCompras?id=${formData.id_evento}`);
     } catch (error) {
       console.error("Erro ao enviar os dados:", error);
       // Lógica adicional para lidar com erros no envio dos dados

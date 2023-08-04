@@ -90,10 +90,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       return;
     }
 
-    const itemId = Number(req.query['id']);
+    const itemId = Number(req.query.id);
 
-    const sql =
-      'DELETE i FROM usuario u JOIN ingresso i ON u.id = i.id_carrinho JOIN carrinho c ON i.id_carrinho = c.id JOIN setor s ON i.id_setor = s.id JOIN endereco l ON l.id_evento = i.id_evento JOIN evento e ON e.id = i.id_evento WHERE u.id = ?';
+    const sql = 'DELETE FROM carrinho WHERE id = ?';
     connection.query(sql, [itemId], (error, results, fields) => {
       if (error) {
         console.error('Erro ao excluir item do carrinho: ', error);
@@ -102,6 +101,5 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       }
       res.json(results);
     });
-    console.log(req.query['id']);
   }
 }

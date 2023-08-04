@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import { connection } from './db';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { randomInt } from 'crypto';
+import { use } from 'react';
 
 
 
@@ -11,22 +12,26 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   router.use('/', async (req: Request, res: Response) => {
     if (req.method === 'POST') {
-      const sql = "INSERT INTO ingresso (tipo, evento_id) VALUES (?, ?)";
+      const sql = "INSERT INTO ingresso (tipo, evento_id, user_id) VALUES (?, ?, ?)";
+      const usuarioID = req.query.id;
       const params = [
         req.body.tipo,
-        req.body.evento_id,
+        req.body.evento_id,        
+        usuarioID,
       ];
-      connection.query(sql, params, (error, results, fields) => {
+      connection.query(sql,params, (error, results, fields) => {
         if (error) {
           console.error('Erro ao inserir novo ingresso', error);
           res.status(500).send('Erro ao inserir novo ingresso.');
           return;
         }
         const ingressoID = results.insertId;
-        const sql2 = "INSERT INTO carrinho (id_ingresso, id_usuario) VALUES (?, ?)";
+        const sql2 = "INSERT INTO carrinho (id_ingresso, quantidade, usuario_id) VALUES (?, ?, ?)";
+        
         const params2 = [
           ingressoID,
-          req.body.id_usuario,
+          req.body.quantidade,
+          usuarioID,
         ];
         connection.query(sql2, params2, (error, results, fields) => {
           if (error) {
@@ -35,10 +40,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             return;
           }
           res.json(results);
-        })
-      }
-    );
-      
+        });
+      });
 
     } else if (req.method === 'GET') {
       if (req.query.id) {
@@ -55,7 +58,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       } else {
         // Listar eventos
         const sql = 'SELECT * FROM ingresso';
-        connection.query(sql, (error, results, fields) => {
+        connection.query(sql, req.query['id'], (error, results, fields) => {
           if (error) {
             console.error('Erro ao buscar ingressos: ', error);
             res.status(500).send('Erro ao buscar ingressos.');
@@ -67,7 +70,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     } else if (req.method === 'DELETE') {
       // Remover evento
       const sql = 'DELETE FROM ingresso WHERE id=?';
-      connection.query(sql, [req.body.idUser], (error, results, fields) => {
+      connection.query(sql, req.query.id, (error, results, fields) => {
         if (error) {
           console.error('Erro ao remover ingresso: ', error);
           res.status(500).send('Erro ao remover ingresso.');
@@ -78,7 +81,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     } else if (req.method === 'PUT') {
       // Atualizar evento
       const sql = 'UPDATE ingresso SET ? WHERE id=?';
-      connection.query(sql, [req.body, req.query.id], (error, results, fields) => {
+      connection.query(sql, (error, results, fields) => {
         if (error) {
           console.error('Erro ao atualizar ingresso: ', error);
           res.status(500).send('Erro ao atualizar ingresso.');
