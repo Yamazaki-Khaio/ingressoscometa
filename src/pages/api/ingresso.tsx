@@ -15,7 +15,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const params = [
         req.body.tipo,
         req.body.evento_id,
-        
       ];
       connection.query(sql, params, (error, results, fields) => {
         if (error) {
@@ -24,7 +23,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           return;
         }
         const ingressoID = results.insertId;
-  });
+        const sql2 = "INSERT INTO carrinho (id_ingresso, id_usuario) VALUES (?, ?)";
+        const params2 = [
+          ingressoID,
+          req.body.id_usuario,
+        ];
+        connection.query(sql2, params2, (error, results, fields) => {
+          if (error) {
+            console.error('Erro ao inserir novo ingresso', error);
+            res.status(500).send('Erro ao inserir novo ingresso.');
+            return;
+          }
+          res.json(results);
+        })
+      }
+    );
+      
 
     } else if (req.method === 'GET') {
       if (req.query.id) {
