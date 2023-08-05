@@ -73,7 +73,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         req.body.setor_nenhum,
         req.body.qnt_nenhum,
        eventoId,
-       req.body.preco_nenhum,
+       0,
       ];
 
       connection.query(endSql, endParams, (error, results, fields) => {

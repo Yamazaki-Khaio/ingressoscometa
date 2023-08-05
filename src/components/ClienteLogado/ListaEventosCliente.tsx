@@ -58,7 +58,10 @@ export default function ListaEventosCliente(props: any) {
             Local={getEnderecoDoEvento(evento.id)[0]?.cidade}
             Image={convertBufferToUrl(evento.imagem)}
             setores={getSetoresDoEvento(evento.id)}
-            preco={getSetoresDoEvento(evento.id[0]?.valor)} // Filtra os setores correspondentes ao evento
+            Preco_vip={getSetoresDoEvento(evento.id)[0]?.preco}
+            Preco_camarote={getSetoresDoEvento(evento.id)[1]?.preco}
+            Preco_backstage={getSetoresDoEvento(evento.id)[2]?.preco}
+             // Filtra os setores correspondentes ao evento
           />
           <div style={{ padding: 50  }}>
             <Link href={`/evento/?id=${evento.id}`} key={evento.id} passHref>

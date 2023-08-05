@@ -8,12 +8,12 @@ export default function Evento(props:any) {
     const { imageSizeClass } = props
     
     return (
-        <div className="relative h-80 w-80 bg-zinc-300 border border-zinc-400 rounded-2xl">
+        <div className="relative h-80 w-80 rounded-2xl">
         <div className="absolute inset-0 mx-auto rounded-2xl overflow-hidden">
-            <Image width={720} height={480} src={props.Image} alt={props.Nome} className="w-full border h-48 rounded-3xl scale-105 transition-transform duration-300 ease-in-out transform hover:scale-110" />
+            <Image width={1920} height={1080} src={props.Image} alt={props.Nome} className="w-full border h-full rounded-3xl transition-transform duration-300 ease-in-out transform hover:scale-110 overflow-hidden" />
             </div>
 
-            <div className="absolute bottom-0 left-0 w-full opacity-100 text-black flex flex-col  justify-center items-center h-auto">
+            <div className=" bg-white absolute bottom-0 left-0 w-full opacity-100 text-black flex flex-col border rounded-3xl justify-center items-center h-auto overflow-hidden ">
             <div className="p-4">
                 <p className="font-bold  text-lg">{props.Nome}</p>
                 <p className="font-sans text-sm">Data: {props.Data}</p>

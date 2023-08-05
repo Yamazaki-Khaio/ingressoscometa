@@ -13,14 +13,43 @@ const settings = {
   centerPadding: "50px",
   rows: 1,
   speed: 2000,
-  slidesToShow: 3,
+  slidesToShow: 4,
   autoplay: true,
   autoplaySpeed: 3000,
   cssEase: "linear",
   adaptiveHeight: true,
   pauseOnHover: true,
-  sliderWidth: 100,
-  slideMargin: 100,
+  responsive: [
+    {
+      breakpoint: 1024,
+      settings: {
+        slidesToShow: 3,
+        centerPadding: "50px",
+        slidesToScroll: 3,
+        infinite: true,
+        dots: true,
+      },
+    },
+    {
+      breakpoint: 768,
+      settings: {
+        slidesToShow: 2,
+        centerPadding: "50px",
+        slidesToScroll: 2,
+        initialSlide: 2,
+      },
+    },
+    {
+      breakpoint: 480,
+      settings: {
+        slidesToShow: 1,
+        centerPadding: "50px",
+        slidesToScroll: 1,
+      },
+    },
+  ],
+
+
 };
 
 export default function DestaqueSemana(props: any) {
@@ -46,17 +75,19 @@ export default function DestaqueSemana(props: any) {
 // renderiza os eventos cadastrado no slide de eventos em destaque
   return (
     <div className="relative flex-wrap justify-center items-center p-4 gap-4">
+      <div className="slider-container">
       <Slider {...settings}>
         {eventos.map((eventoDestaque: any, index: number) => (
           <div key={index} className="destaque-evento">
             <img
               src={convertBufferToUrl(eventoDestaque.imagem)}
               alt={eventoDestaque.nome_evento}
-              className="w-[500px] h-[300px] object-cover rounded-xl border-separate border-4 border-zinc-100"
+              className="w-full h-full object-cover rounded-xl border-separate border-4 border-zinc-100"
             />
           </div>
         ))}
       </Slider>
+    </div>
     </div>
   );
 }
