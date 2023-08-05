@@ -73,9 +73,7 @@ export default function EventoLogado(props: any) {
                     </div>
                     <div className="flex space-x-2 mb-4 text-sm font-medium">
                         <div className="flex space-x-4">
-                            <button className="px-6 h-12 uppercase font-semibold tracking-wider border-2 border-black bg-teal-400 text-black" type="submit">
-                                Adicionar ao carrinho
-                            </button>
+
                         </div>
                         <button onClick={() => handleBotaoClicado(props.setores)}>
                             <Botao href={`/carrinho?id=${id_usuario}`} NomeBotao="Adicionar ao carrinho" />
