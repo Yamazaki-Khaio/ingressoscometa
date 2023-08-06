@@ -63,7 +63,7 @@ export default function ListaEventosCliente(props: any) {
             Preco_backstage={getSetoresDoEvento(evento.id)[2]?.preco}
              // Filtra os setores correspondentes ao evento
           />
-          <div style={{ padding: 50  }}>
+          <div style={{ padding: 40}}>
             <Link href={`/evento/?id=${evento.id}`} key={evento.id} passHref>
               <VerMaisDetalhes />
             </Link>

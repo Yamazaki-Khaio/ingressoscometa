@@ -4,24 +4,21 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
-    if (!req.query.id) {
-      res.status(400).send("ID do usuário não fornecido.");
-      return;
+    if (req.query.id) {
+      const userId = req.query.id;
+      const sql = 'SELECT s.valor, s.nome AS nome_setor, e.nome_evento, e.imagem, l.cidade, i.tipo, c.quantidade FROM setor s JOIN evento e ON s.id_evento = e.id JOIN ingresso i ON i.evento_id = e.id JOIN carrinho c ON c.id_ingresso = i.id JOIN endereco l ON e.id = l.id_evento WHERE c.usuario_id = ?';
+      connection.query(sql, [userId], (error, results, fields) => {
+        if (error) {
+          console.error('Erro ao buscar carrinho: ', error);
+          res.status(500).send('Erro ao buscar carrinho.');
+          return;
+        }
+        res.json(results);
+      });
     }
 
-    const userId = parseInt(req.query.id as string);
-
-    const sql = 'SELECT s.valor, s.nome, e.imagem, e.nome_evento, l.cidade, i.tipo, c.quantidade FROM setor s, evento e, carrinho c, ingresso i, endereco l WHERE usuario_id = ? and c.id_ingresso = i.id and i.evento_id = e.id';
-    connection.query(sql, [userId], (error, results, fields) => {
-      if (error) {
-        console.error('Erro ao buscar carrinho: ', error);
-        res.status(500).send('Erro ao buscar carrinho.');
-        return;
-      }
-      res.json(results);
-    });
-} 
-   else if (req.method === 'POST') {
+  }
+  else if (req.method === 'POST') {
     console.log('entrou no POST');
 
     // Verifique se o ingresso ainda está disponível

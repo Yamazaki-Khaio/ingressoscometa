@@ -7,6 +7,7 @@ import axios from 'axios';
 
 export default function EventoLogado(props: any) {
     const [id_usuario, setIdUsuario] = useState("");
+    const [setores, setSetores] = useState([])
 
     useEffect(() => {
         async function getUserId() {
@@ -28,8 +29,6 @@ export default function EventoLogado(props: any) {
                     evento_id: props.id, // Use the 'evento_id' from props
                     quantidade: 1,
                 }
-
-
 
                 axios.post(`/api/ingresso?id=${id_usuario}`, form, {
                     headers: {
@@ -58,8 +57,34 @@ export default function EventoLogado(props: any) {
                         <h1 className="relative w-full flex-none mb-2 text-2xl font-semibold text-white">
                             {props.Nome}
                         </h1>
-                        <div className="relative text-lg text-white">
-                            {props.preco}
+                        <div className="relative text-lg  text-white  p-1 px-1">
+                            <ul className="mt-1 flex flex-wrap">
+                                {props.Preco_backstage &&
+                                    <li className="font-sans text-4sm mt-2 flex items-center">
+                                        <h1 className="mr-1 items-center">Backstage:</h1>
+                                        <span className="mr-4 bg-gradient-to-br  from-teal-500 to-teal-800 text-white rounded-full px-2 py-1">
+                                            {props.Preco_backstage?.toFixed(2)} R$
+                                        </span>
+                                    </li>
+                                }
+
+                                {props.Preco_camarote &&
+                                    <li className="font-sans text-4sm mt-2 flex items-center ">
+                                        <span className="mr-1 items-center">Camarote:</span>
+                                        <span className=" mr-4 bg-gradient-to-br justify-center from-teal-500 to-teal-800 text-white rounded-full px-2 py-1">
+                                            {props.Preco_camarote?.toFixed(2)} R$
+                                        </span>
+                                    </li>
+                                }
+                                {props.Preco_vip &&
+                                    <li className="font-sans text-4sm mt-2 flex items-center">
+                                        <span className="mr-1 items-center">VIP:</span>
+                                        <span className="mr-4 bg-gradient-to-br from-teal-500 to-teal-800 text-white rounded-full px-2 py-1">
+                                            {props.Preco_vip?.toFixed(2)} R$
+                                        </span>
+                                    </li>
+                                }
+                            </ul>
                         </div>
                         <div className="relative uppercase text-teal-400 ml-3">
                             No estoque
